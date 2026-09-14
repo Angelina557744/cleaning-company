@@ -1,20 +1,41 @@
-/* ===== Бургер-меню ===== */
 const burger = document.querySelector("[data-burger]");
 const nav = document.querySelector("[data-nav]");
+const overlay = document.querySelector("[data-overlay]");
 
 if (burger && nav) {
+  const openMenu = () => {
+    burger.classList.add("is-active");
+    nav.classList.add("is-open");
+    if (overlay) overlay.classList.add("is-visible");
+    document.body.classList.add("no-scroll");
+  };
+
+  const closeMenu = () => {
+    burger.classList.remove("is-active");
+    nav.classList.remove("is-open");
+    if (overlay) overlay.classList.remove("is-visible");
+    document.body.classList.remove("no-scroll");
+  };
+
   burger.addEventListener("click", () => {
-    burger.classList.toggle("is-active");
-    nav.classList.toggle("is-open");
+    if (nav.classList.contains("is-open")) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
   });
 
   nav.addEventListener("click", (e) => {
-    if (e.target.closest("a")) {
-      burger.classList.remove("is-active");
-      nav.classList.remove("is-open");
-    }
+    if (e.target.closest("a")) closeMenu();
+  });
+
+  if (overlay) overlay.addEventListener("click", closeMenu);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && nav.classList.contains("is-open")) closeMenu();
   });
 }
+
 
 /* ===== Появление секций ===== */
 const revealItems = document.querySelectorAll("[data-reveal]");
